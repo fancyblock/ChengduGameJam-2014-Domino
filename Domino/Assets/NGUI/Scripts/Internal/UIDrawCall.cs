@@ -41,7 +41,6 @@ public class UIDrawCall : MonoBehaviour
 		ConstrainButDontClip = 4,	// No actual clipping, but does have an area
 	}
 
-	[HideInInspector][System.NonSerialized] public int widgetCount = 0;
 	[HideInInspector][System.NonSerialized] public int depthStart = int.MaxValue;
 	[HideInInspector][System.NonSerialized] public int depthEnd = int.MinValue;
 	[HideInInspector][System.NonSerialized] public UIPanel manager;
@@ -76,14 +75,6 @@ public class UIDrawCall : MonoBehaviour
 	[System.NonSerialized]
 	public bool isDirty = false;
 
-	public delegate void OnRenderCallback (Material mat);
-
-	/// <summary>
-	/// Callback that will be triggered at OnWillRenderObject() time.
-	/// </summary>
-
-	public OnRenderCallback onRender;
-
 	/// <summary>
 	/// Render queue used by the draw call.
 	/// </summary>
@@ -111,6 +102,7 @@ public class UIDrawCall : MonoBehaviour
 		}
 	}
 
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 	/// <summary>
 	/// Renderer's sorting order, to be used with Unity's 2D system.
 	/// </summary>
@@ -120,6 +112,7 @@ public class UIDrawCall : MonoBehaviour
 		get { return (mRenderer != null) ? mRenderer.sortingOrder : 0; }
 		set { if (mRenderer != null && mRenderer.sortingOrder != value) mRenderer.sortingOrder = value; }
 	}
+#endif
 
 	/// <summary>
 	/// Final render queue used to draw the draw call's geometry.
@@ -249,9 +242,6 @@ public class UIDrawCall : MonoBehaviour
 
 	void CreateMaterial ()
 	{
-		mLegacyShader = false;
-		mClipCount = panel.clipCount;
-
 		string shaderName = (mShader != null) ? mShader.name :
 			((mMaterial != null) ? mMaterial.shader.name : "Unlit/Transparent Colored");
 
@@ -267,17 +257,22 @@ public class UIDrawCall : MonoBehaviour
 			}
 		}
 
-		if (shaderName.StartsWith("Hidden/"))
+		if (shaderName.StartsWith("HIDDEN/"))
 			shaderName = shaderName.Substring(7);
 
 		// Legacy functionality
 		const string soft = " (SoftClip)";
 		shaderName = shaderName.Replace(soft, "");
 
+		// Try to find the new shader
+		Shader shader;
+		mLegacyShader = false;
+		mClipCount = panel.clipCount;
+
 		if (mClipCount != 0)
 		{
-			shader = Shader.Find("Hidden/" + shaderName + " " + mClipCount);
-			if (shader == null) shader = Shader.Find(shaderName + " " + mClipCount);
+			shader = Shader.Find("HIDDEN/" + shaderName + " " + mClipCount);
+			if (shader == null) Shader.Find(shaderName + " " + mClipCount);
 
 			// Legacy functionality
 			if (shader == null && mClipCount == 1)
@@ -293,26 +288,19 @@ public class UIDrawCall : MonoBehaviour
 			mDynamicMat = new Material(mMaterial);
 			mDynamicMat.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
 			mDynamicMat.CopyPropertiesFromMaterial(mMaterial);
-#if !UNITY_FLASH
-			string[] keywords = mMaterial.shaderKeywords;
-			for (int i = 0; i < keywords.Length; ++i)
-				mDynamicMat.EnableKeyword(keywords[i]);
-#endif
-			// If there is a valid shader, assign it to the custom material
-			if (shader != null)
-			{
-				mDynamicMat.shader = shader;
-			}
-			else if (mClipCount != 0)
-			{
-				Debug.LogError(shaderName + " shader doesn't have a clipped shader version for " + mClipCount + " clip regions");
-			}
 		}
 		else
 		{
 			mDynamicMat = new Material(shader);
 			mDynamicMat.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
 		}
+
+		// If there is a valid shader, assign it to the custom material
+		if (shader != null)
+		{
+			mDynamicMat.shader = shader;
+		}
+		else Debug.LogError(shaderName + " shader doesn't have a clipped shader version for " + mClipCount + " clip regions");
 	}
 
 	/// <summary>
@@ -361,9 +349,8 @@ public class UIDrawCall : MonoBehaviour
 	/// Set the draw call's geometry.
 	/// </summary>
 
-	public void UpdateGeometry (int widgetCount)
+	public void UpdateGeometry ()
 	{
-		this.widgetCount = widgetCount;
 		int count = verts.size;
 
 		// Safety check to ensure we get valid values
@@ -385,7 +372,9 @@ public class UIDrawCall : MonoBehaviour
 					mMesh = new Mesh();
 					mMesh.hideFlags = HideFlags.DontSave;
 					mMesh.name = (mMaterial != null) ? mMaterial.name : "Mesh";
+#if !UNITY_3_5
 					mMesh.MarkDynamic();
+#endif
 					setIndices = true;
 				}
 #if !UNITY_FLASH
@@ -399,12 +388,9 @@ public class UIDrawCall : MonoBehaviour
 				if (!trim && panel.renderQueue != UIPanel.RenderQueue.Automatic)
 					trim = (mMesh == null || mMesh.vertexCount != verts.buffer.Length);
 
-				// NOTE: Apparently there is a bug with Adreno devices:
-				// http://www.tasharen.com/forum/index.php?topic=8415.0
-#if !UNITY_ANDROID
 				// If the number of vertices in the buffer is less than half of the full buffer, trim it
 				if (!trim && (verts.size << 1) < verts.buffer.Length) trim = true;
-#endif
+
 				mTriangles = (verts.size >> 1);
 
 				if (trim || verts.buffer.Length > 65000)
@@ -547,7 +533,6 @@ public class UIDrawCall : MonoBehaviour
 	{
 		UpdateMaterials();
 
-		if (onRender != null) onRender(mDynamicMat ?? mMaterial);
 		if (mDynamicMat == null || mClipCount == 0) return;
 
 		if (!mLegacyShader)
@@ -605,21 +590,22 @@ public class UIDrawCall : MonoBehaviour
 		}
 	}
 
-	static int[] ClipRange =
+	static string[] ClipRange =
 	{
-		Shader.PropertyToID("_ClipRange0"),
-		Shader.PropertyToID("_ClipRange1"),
-		Shader.PropertyToID("_ClipRange2"),
-		Shader.PropertyToID("_ClipRange4"),
+		"_ClipRange0",
+		"_ClipRange1",
+		"_ClipRange2",
+		"_ClipRange4",
 	};
 
-	static int[] ClipArgs =
+	static string[] ClipArgs =
 	{
-		Shader.PropertyToID("_ClipArgs0"),
-		Shader.PropertyToID("_ClipArgs1"),
-		Shader.PropertyToID("_ClipArgs2"),
-		Shader.PropertyToID("_ClipArgs3"),
+		"_ClipArgs0",
+		"_ClipArgs1",
+		"_ClipArgs2",
+		"_ClipArgs3",
 	};
+
 	/// <summary>
 	/// Set the shader clipping parameters.
 	/// </summary>
@@ -660,8 +646,6 @@ public class UIDrawCall : MonoBehaviour
 
 		NGUITools.DestroyImmediate(mDynamicMat);
 		mDynamicMat = null;
-		if (mRenderer != null)
-			mRenderer.sharedMaterials = new Material[] {};
 	}
 
 	/// <summary>
@@ -702,7 +686,9 @@ public class UIDrawCall : MonoBehaviour
 		dc.mainTexture = tex;
 		dc.shader = shader;
 		dc.renderQueue = pan.startingRenderQueue;
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 		dc.sortingOrder = pan.sortingOrder;
+#endif
 		dc.manager = pan;
 		return dc;
 	}
@@ -809,8 +795,6 @@ public class UIDrawCall : MonoBehaviour
 	{
 		if (dc)
 		{
-			dc.onRender = null;
-
 			if (Application.isPlaying)
 			{
 				if (mActiveList.Remove(dc))

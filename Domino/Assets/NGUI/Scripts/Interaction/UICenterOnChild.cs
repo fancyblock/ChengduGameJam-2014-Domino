@@ -13,8 +13,6 @@ using UnityEngine;
 [AddComponentMenu("NGUI/Interaction/Center Scroll View on Child")]
 public class UICenterOnChild : MonoBehaviour
 {
-	public delegate void OnCenterCallback (GameObject centeredObject);
-
 	/// <summary>
 	/// The strength of the spring.
 	/// </summary>
@@ -33,12 +31,6 @@ public class UICenterOnChild : MonoBehaviour
 
 	public SpringPanel.OnFinished onFinished;
 
-	/// <summary>
-	/// Callback triggered whenever the script begins centering on a new child object.
-	/// </summary>
-
-	public OnCenterCallback onCenter;
-
 	UIScrollView mScrollView;
 	GameObject mCenteredObject;
 
@@ -48,22 +40,22 @@ public class UICenterOnChild : MonoBehaviour
 
 	public GameObject centeredObject { get { return mCenteredObject; } }
 
-	void Start () { Recenter(); }
-	void OnEnable () { if (mScrollView) { mScrollView.centerOnChild = this; Recenter(); } }
-	void OnDisable () { if (mScrollView) mScrollView.centerOnChild = null; }
+	void OnEnable () { Recenter(); }
 	void OnDragFinished () { if (enabled) Recenter(); }
 
 	/// <summary>
 	/// Ensure that the threshold is always positive.
 	/// </summary>
 
-	void OnValidate () { nextPageThreshold = Mathf.Abs(nextPageThreshold); }
+	void OnValidate ()
+	{
+		nextPageThreshold = Mathf.Abs(nextPageThreshold);
+	}
 
 	/// <summary>
 	/// Recenter the draggable list on the center-most child.
 	/// </summary>
 
-	[ContextMenu("Execute")]
 	public void Recenter ()
 	{
 		if (mScrollView == null)
@@ -78,11 +70,7 @@ public class UICenterOnChild : MonoBehaviour
 			}
 			else
 			{
-				if (mScrollView)
-				{
-					mScrollView.centerOnChild = this;
-					mScrollView.onDragFinished = OnDragFinished;
-				}
+				mScrollView.onDragFinished = OnDragFinished;
 
 				if (mScrollView.horizontalScrollBar != null)
 					mScrollView.horizontalScrollBar.onDragFinished = OnDragFinished;
@@ -93,27 +81,23 @@ public class UICenterOnChild : MonoBehaviour
 		}
 		if (mScrollView.panel == null) return;
 
-		Transform trans = transform;
-		if (trans.childCount == 0) return;
-
 		// Calculate the panel's center in world coordinates
 		Vector3[] corners = mScrollView.panel.worldCorners;
 		Vector3 panelCenter = (corners[2] + corners[0]) * 0.5f;
 
 		// Offset this value by the momentum
-		Vector3 momentum = mScrollView.currentMomentum * mScrollView.momentumAmount;
-		Vector3 moveDelta = NGUIMath.SpringDampen(ref momentum, 9f, 2f);
-		Vector3 pickingPoint = panelCenter - moveDelta * 0.01f; // Magic number based on what "feels right"
+		Vector3 pickingPoint = panelCenter - mScrollView.currentMomentum * (mScrollView.momentumAmount * 0.1f);
+		mScrollView.currentMomentum = Vector3.zero;
 
 		float min = float.MaxValue;
 		Transform closest = null;
+		Transform trans = transform;
 		int index = 0;
 
 		// Determine the closest child
 		for (int i = 0, imax = trans.childCount; i < imax; ++i)
 		{
 			Transform t = trans.GetChild(i);
-			if (!t.gameObject.activeInHierarchy) continue;
 			float sqrDist = Vector3.SqrMagnitude(t.position - pickingPoint);
 
 			if (sqrDist < min)
@@ -167,6 +151,7 @@ public class UICenterOnChild : MonoBehaviour
 				}
 			}
 		}
+
 		CenterOn(closest, panelCenter);
 	}
 
@@ -192,27 +177,10 @@ public class UICenterOnChild : MonoBehaviour
 			localOffset.z = 0f;
 
 			// Spring the panel to this calculated position
-#if UNITY_EDITOR
-			if (!Application.isPlaying)
-			{
-				panelTrans.localPosition = panelTrans.localPosition - localOffset;
-
-				Vector4 co = mScrollView.panel.clipOffset;
-				co.x += localOffset.x;
-				co.y += localOffset.y;
-				mScrollView.panel.clipOffset = co;
-			}
-			else
-#endif
-			{
-				SpringPanel.Begin(mScrollView.panel.cachedGameObject,
-					panelTrans.localPosition - localOffset, springStrength).onFinished = onFinished;
-			}
+			SpringPanel.Begin(mScrollView.panel.cachedGameObject,
+				panelTrans.localPosition - localOffset, springStrength).onFinished = onFinished;
 		}
 		else mCenteredObject = null;
-
-		// Notify the listener
-		if (onCenter != null) onCenter(mCenteredObject);
 	}
 
 	/// <summary>

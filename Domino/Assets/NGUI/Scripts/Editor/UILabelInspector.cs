@@ -134,7 +134,7 @@ public class UILabelInspector : UIWidgetInspector
 					prop = NGUIEditorTools.DrawProperty("", serializedObject, "mFontStyle", GUILayout.MinWidth(40f));
 					NGUISettings.fontStyle = (FontStyle)prop.intValue;
 					
-					NGUIEditorTools.DrawPadding();
+					GUILayout.Space(18f);
 					EditorGUI.EndDisabledGroup();
 				}
 				GUILayout.EndHorizontal();
@@ -158,7 +158,14 @@ public class UILabelInspector : UIWidgetInspector
 			bool ww = GUI.skin.textField.wordWrap;
 			GUI.skin.textField.wordWrap = true;
 			SerializedProperty sp = serializedObject.FindProperty("mText");
-
+#if UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2
+			GUI.changed = false;
+			string text = EditorGUILayout.TextArea(sp.stringValue, GUI.skin.textArea, GUILayout.Height(100f));
+			if (GUI.changed) sp.stringValue = text;
+#else
+#if UNITY_4_0 || UNITY_4_1 || UNITY_4_2
+			GUILayout.Space(-16f);
+#endif
 			if (sp.hasMultipleDifferentValues)
 			{
 				NGUIEditorTools.DrawProperty("", sp, GUILayout.Height(128f));
@@ -197,7 +204,7 @@ public class UILabelInspector : UIWidgetInspector
 					GUILayout.EndHorizontal();
 				}
 			}
-
+#endif
 			GUI.skin.textField.wordWrap = ww;
 
 			SerializedProperty ov = NGUIEditorTools.DrawPaddedProperty("Overflow", serializedObject, "mOverflow");
@@ -211,8 +218,11 @@ public class UILabelInspector : UIWidgetInspector
 			EditorGUI.BeginDisabledGroup(mLabel.bitmapFont != null && mLabel.bitmapFont.packedFontShader);
 			GUILayout.BeginHorizontal();
 			SerializedProperty gr = NGUIEditorTools.DrawProperty("Gradient", serializedObject, "mApplyGradient",
-			GUILayout.Width(95f));
-
+#if UNITY_3_5
+				GUILayout.Width(93f));
+#else
+				GUILayout.Width(95f));
+#endif
 			EditorGUI.BeginDisabledGroup(!gr.hasMultipleDifferentValues && !gr.boolValue);
 			{
 				NGUIEditorTools.SetLabelWidth(30f);
@@ -220,8 +230,11 @@ public class UILabelInspector : UIWidgetInspector
 				GUILayout.EndHorizontal();
 				GUILayout.BeginHorizontal();
 				NGUIEditorTools.SetLabelWidth(50f);
+#if UNITY_3_5
+				GUILayout.Space(81f);
+#else
 				GUILayout.Space(79f);
-
+#endif
 				NGUIEditorTools.DrawProperty("Bottom", serializedObject, "mGradientBottom", GUILayout.MinWidth(40f));
 				NGUIEditorTools.SetLabelWidth(80f);
 			}
@@ -243,7 +256,7 @@ public class UILabelInspector : UIWidgetInspector
 					NGUIEditorTools.SetLabelWidth(20f);
 					NGUIEditorTools.DrawProperty("X", serializedObject, "mEffectDistance.x", GUILayout.MinWidth(40f));
 					NGUIEditorTools.DrawProperty("Y", serializedObject, "mEffectDistance.y", GUILayout.MinWidth(40f));
-					NGUIEditorTools.DrawPadding();
+					GUILayout.Space(18f);
 					NGUIEditorTools.SetLabelWidth(80f);
 				}
 			}
@@ -256,7 +269,7 @@ public class UILabelInspector : UIWidgetInspector
 			NGUIEditorTools.SetLabelWidth(20f);
 			NGUIEditorTools.DrawProperty("X", serializedObject, "mSpacingX", GUILayout.MinWidth(40f));
 			NGUIEditorTools.DrawProperty("Y", serializedObject, "mSpacingY", GUILayout.MinWidth(40f));
-			NGUIEditorTools.DrawPadding();
+			GUILayout.Space(18f);
 			NGUIEditorTools.SetLabelWidth(80f);
 			GUILayout.EndHorizontal();
 

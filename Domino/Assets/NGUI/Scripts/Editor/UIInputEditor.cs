@@ -52,12 +52,14 @@ public class UIInputEditor : UIWidgetContainerEditor
 
 			NGUIEditorTools.DrawProperty("Caret Color", serializedObject, "caretColor");
 			NGUIEditorTools.DrawProperty("Selection Color", serializedObject, "selectionColor");
-			NGUIEditorTools.DrawPaddedProperty(serializedObject, "inputType");
-			NGUIEditorTools.DrawPaddedProperty(serializedObject, "validation");
-			NGUIEditorTools.DrawPaddedProperty("Mobile Keyboard", serializedObject, "keyboardType");
-			NGUIEditorTools.DrawPaddedProperty("  Hide Input", serializedObject, "hideInput");
-			NGUIEditorTools.DrawPaddedProperty(serializedObject, "onReturnKey");
+#if !MOBILE
 			NGUIEditorTools.DrawProperty(serializedObject, "selectOnTab");
+#endif
+			NGUIEditorTools.DrawPaddedProperty(serializedObject, "inputType");
+#if MOBILE
+			NGUIEditorTools.DrawPaddedProperty(serializedObject, "keyboardType");
+#endif
+			NGUIEditorTools.DrawPaddedProperty(serializedObject, "validation");
 
 			SerializedProperty sp = serializedObject.FindProperty("characterLimit");
 
@@ -66,7 +68,7 @@ public class UIInputEditor : UIWidgetContainerEditor
 			if (sp.hasMultipleDifferentValues || input.characterLimit > 0)
 			{
 				EditorGUILayout.PropertyField(sp);
-				NGUIEditorTools.DrawPadding();
+				GUILayout.Space(18f);
 			}
 			else
 			{

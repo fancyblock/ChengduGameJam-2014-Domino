@@ -63,7 +63,10 @@ public class NGUIDebug : MonoBehaviour
 			mLines.Add(text);
 			CreateInstance();
 		}
-		else Debug.Log(text);
+		else
+		{
+			Debug.Log(text);
+		}
 	}
 
 	/// <summary>
@@ -87,12 +90,6 @@ public class NGUIDebug : MonoBehaviour
 		}
 		LogString(text);
 	}
-
-	/// <summary>
-	/// Clear the logged text.
-	/// </summary>
-
-	static public void Clear () { mLines.Clear(); }
 
 	/// <summary>
 	/// Draw bounds immediately. Won't be remembered for the next frame.
