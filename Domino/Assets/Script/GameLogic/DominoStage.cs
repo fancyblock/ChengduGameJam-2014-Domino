@@ -104,7 +104,7 @@ public class DominoStage : MonoBehaviour
     /// </summary>
     public void DominoPushFail()
     {
-        m_state = eDominoStageState.eStatePushFailed;
+        //m_state = eDominoStageState.eStatePushFailed;
     }
 
     /// <summary>
@@ -157,12 +157,14 @@ public class DominoStage : MonoBehaviour
     /// <param name="pos"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public bool HitDominos( Vector2 pos, float range, Domino domino = null )
+    public int HitDominos( Vector2 pos, float range, Domino domino = null )
     {
         if (m_state != eDominoStageState.eStateRunning)
         {
-            return false;
+            return 0;
         }
+
+        int hitCount = 0;
 
         foreach (Domino d in m_dominos)
         {
@@ -170,12 +172,12 @@ public class DominoStage : MonoBehaviour
             {
                 if (d.Push( pos, range ))
                 {
-                    return true;
+                    hitCount++;
                 }
             }
         }
 
-        return false;
+        return hitCount;
     }
 
     /// <summary>
