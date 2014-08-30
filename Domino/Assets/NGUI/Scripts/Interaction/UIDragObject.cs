@@ -171,8 +171,6 @@ public class UIDragObject : MonoBehaviour
 					// Create the plane to drag along
 					Transform trans = UICamera.currentCamera.transform;
 					mPlane = new Plane((mPanel != null ? mPanel.cachedTransform.rotation : trans.rotation) * Vector3.back, UICamera.lastHit.point);
-
-                    mInDragging = true;
                 }
 			}
 			else if (mPressed && mTouchID == UICamera.currentTouchID)
@@ -228,6 +226,7 @@ public class UIDragObject : MonoBehaviour
 				// Adjust the position and bounds
 				Vector3 before = target.localPosition;
 				Move(offset);
+                mInDragging = true;
 
 				// We want to constrain the UI to be within bounds
 				if (restrictWithinPanel)

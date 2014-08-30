@@ -22,15 +22,30 @@ public class DominoStage : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        //[TEMP]
+        //[TEMP] 
         // calculate the mouse position and create a domino 
         if( Input.GetKeyUp( KeyCode.Alpha1 ))
         {
             Domino d = CreateDomino();
             d.transform.localPosition = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
         }
-        //[TEMP]
+        //[TEMP] 
 	}
+
+    /// <summary>
+    /// mouse double click on stage for trigger a force 
+    /// </summary>
+    public void onMouseClick()
+    {
+        //[TEMP]
+        // calculate the mouse position and trigger
+        Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(1.0f, 0.0f), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(-1.0f, 0.0f), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, 1.0f), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, -1.0f), 70);
+        //[TEMP]
+    }
 
     /// <summary>
     /// remove all the dominos and reset all values 
@@ -68,21 +83,6 @@ public class DominoStage : MonoBehaviour
         m_dominos.Add(domino);
 
         return domino;
-    }
-
-    /// <summary>
-    /// mouse double click on stage for trigger a force 
-    /// </summary>
-    public void onMouseClick()
-    {
-        //[TEMP]
-        // calculate the mouse position and trigger
-        Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( 1.0f, 0.0f ), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( -1.0f, 0.0f ), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( 0.0f, 1.0f ), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( 0.0f, -1.0f ), 70);
-        //[TEMP]
     }
 
     /// <summary>
