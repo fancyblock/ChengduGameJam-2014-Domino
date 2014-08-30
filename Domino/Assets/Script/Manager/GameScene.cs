@@ -40,13 +40,6 @@ public class GameScene : Scene {
 	// Update is called once per frame
 	void Update () 
 	{
-
-		if(Input.GetMouseButtonUp(0))
-		{
-			SceneMgr.Instance.PopScene();
-		}
-
-
 		if (!waitBGM)
 		{
 			StartCoroutine(TryToSwitchBGM());
