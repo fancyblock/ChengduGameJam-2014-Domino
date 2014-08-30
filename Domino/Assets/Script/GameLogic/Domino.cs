@@ -10,8 +10,9 @@ public class Domino : MonoBehaviour
     public GameObject m_imgStand;
     public GameObject m_imgOverlay;
     public GameObject m_imgLay;
-    public DominoStage m_stage;
+    public float m_blockLength;
 
+    protected DominoStage m_stage;
     protected int m_state;
     protected float m_angle;
 
@@ -26,6 +27,15 @@ public class Domino : MonoBehaviour
 	void Update () 
     {
 	}
+
+    /// <summary>
+    /// set domino stage 
+    /// </summary>
+    /// <param name="ds"></param>
+    public void SetDominoStage( DominoStage ds )
+    {
+        m_stage = ds;
+    }
 
     /// <summary>
     /// is stand or not 
@@ -69,18 +79,6 @@ public class Domino : MonoBehaviour
     }
 
     /// <summary>
-    /// push the domino 
-    /// </summary>
-    /// <param name="spot"></param>
-    /// <param name="forceDis"></param>
-    public bool Push( Vector2 spot, float forceDis )
-    {
-        //TODO 
-
-        return false;
-    }
-
-    /// <summary>
     /// rotation the domino 
     /// </summary>
     public void onEditRotation()
@@ -91,5 +89,27 @@ public class Domino : MonoBehaviour
         SetAngle(m_angle + 30.0f);
         //[TEMP]
     }
+
+    /// <summary>
+    /// push the domino 
+    /// </summary>
+    /// <param name="spot"></param>
+    /// <param name="forceDis"></param>
+    public bool Push(Vector2 spot, Vector2 dir, float forceDis)
+    {
+        Vector2 selfPos = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        
+        if( ( selfPos - spot ).magnitude <= forceDis )
+        {
+            // calculate if this domino can be push down or not 
+            //TODO 
+        }
+
+        return false;
+    }
+
+    //---------------------- private functions ----------------------
+
+    //protected bool 
 
 }

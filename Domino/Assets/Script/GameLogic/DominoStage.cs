@@ -5,22 +5,47 @@ using System.Collections.Generic;
 
 public class DominoStage : MonoBehaviour 
 {
+    public const int INIT_DEPTH = 1000;
+
     public GameObject m_dominoTemplete;
     public Transform m_stage;
     public Camera m_camera;
 
-    List<Domino> m_dominos;
+    protected List<Domino> m_dominos = new List<Domino>();
+    protected int m_curAvailableDepth;
 
 	// Use this for initialization
 	void Start () 
     {
-        m_dominos = new List<Domino>();
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
+        //[TEMP]
+        // calculate the mouse position and create a domino 
+        if( Input.GetKeyUp( KeyCode.Alpha1 ))
+        {
+            Domino d = CreateDomino();
+            d.transform.localPosition = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
+        }
+        //[TEMP]
 	}
+
+    /// <summary>
+    /// remove all the dominos and reset all values 
+    /// </summary>
+    public void Reset()
+    {
+        // clean old data 
+        foreach( Domino d in m_dominos )
+        {
+            Destroy(d.gameObject);
+        }
+
+        m_curAvailableDepth = INIT_DEPTH;
+        m_dominos.Clear();
+    }
 
     /// <summary>
     /// create a domino 
@@ -36,6 +61,7 @@ public class DominoStage : MonoBehaviour
         go.transform.parent = m_stage;
         go.transform.localScale = Vector3.one;
 
+        domino.SetDominoStage(this);
         domino.SetStandState();
         domino.SetAngle(0.0f);
 
@@ -49,9 +75,14 @@ public class DominoStage : MonoBehaviour
     /// </summary>
     public void onMouseClick()
     {
-        // calculate the mouse position and create a domino 
-        Domino d = CreateDomino();
-        d.transform.localPosition = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
+        //[TEMP]
+        // calculate the mouse position and trigger
+        Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( 1.0f, 0.0f ), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( -1.0f, 0.0f ), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( 0.0f, 1.0f ), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2( 0.0f, -1.0f ), 70);
+        //[TEMP]
     }
 
     /// <summary>
@@ -59,7 +90,7 @@ public class DominoStage : MonoBehaviour
     /// </summary>
     /// <param name="spot"></param>
     /// <param name="forceDis"></param>
-    public int ForceToSpot( Vector2 spot, float forceDis )
+    public int ForceToSpot( Vector2 spot, Vector2 dir, float forceDis )
     {
         int pushDownCount = 0;
 
@@ -67,7 +98,7 @@ public class DominoStage : MonoBehaviour
         {
             if( d.IsStand() )
             {
-                if (d.Push(spot, forceDis) )
+                if ( d.Push(spot, dir, forceDis) )
                 {
                     pushDownCount++;
                 }
@@ -75,6 +106,15 @@ public class DominoStage : MonoBehaviour
         }
 
         return pushDownCount;
+    }
+
+    /// <summary>
+    /// return the available depth
+    /// </summary>
+    /// <returns></returns>
+    public int GetNextAvailableDepth()
+    {
+        return m_curAvailableDepth--;
     }
 
 }
