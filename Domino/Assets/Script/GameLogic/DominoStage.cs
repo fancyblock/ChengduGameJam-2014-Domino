@@ -12,7 +12,7 @@ public class DominoStage : MonoBehaviour
     public Camera m_camera;
 
     protected List<Domino> m_dominos = new List<Domino>();
-    protected int m_curAvailableDepth;
+    protected int m_curAvailableDepth = INIT_DEPTH;
 
 	// Use this for initialization
 	void Start () 
