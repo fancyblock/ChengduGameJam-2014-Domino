@@ -3,6 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum eDominoStageState
+{
+    eStateRunning,
+    eStateStop,
+    eStatePushFailed,
+}
+
 public class DominoStage : MonoBehaviour 
 {
     public const int INIT_DEPTH = 1000;
@@ -12,34 +19,45 @@ public class DominoStage : MonoBehaviour
     public Camera m_camera;
     public EndPoint m_endPoint;
 
+    protected eDominoStageState m_state;
     protected List<Domino> m_dominos = new List<Domino>();
     protected int m_curAvailableDepth = INIT_DEPTH;
-
-	// Use this for initialization
-	void Start () 
-    {
-	}
 	
+    //------------------------ TEMP ------------------------
+    
 	// Update is called once per frame
 	void Update () 
     {
-        //[TEMP] 
         // calculate the mouse position and create a domino 
         if( Input.GetKeyUp( KeyCode.Alpha1 ))
         {
             Domino d = CreateDomino();
             d.transform.localPosition = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
         }
-        //[TEMP] 
 	}
 
     public void onDoubleClk()
     {
-        //[TEMP]
         // calculate the mouse position and trigger
         Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
         HitDominos(new Vector2(pos.x, pos.y), 50.0f);
-        //[TEMP]
+    }
+
+    //------------------------ TEMP ------------------------
+
+    /// <summary>
+    /// getter && setter of the domino stage state 
+    /// </summary>
+    protected eDominoStageState STAGE_STATE
+    {
+        get
+        {
+            return m_state;
+        }
+        set
+        {
+            m_state = value;
+        }
     }
 
     /// <summary>
@@ -55,6 +73,7 @@ public class DominoStage : MonoBehaviour
 
         m_curAvailableDepth = INIT_DEPTH;
         m_dominos.Clear();
+        m_state = eDominoStageState.eStateRunning;
     }
 
     /// <summary>
@@ -81,12 +100,25 @@ public class DominoStage : MonoBehaviour
     }
 
     /// <summary>
+    /// domino push fail 
+    /// </summary>
+    public void DominoPushFail()
+    {
+        m_state = eDominoStageState.eStatePushFailed;
+    }
+
+    /// <summary>
     /// force to spot 
     /// </summary>
     /// <param name="spot"></param>
     /// <param name="forceDis"></param>
     public int ForceToSpot( Vector2 spot, Vector2 dir, float forceDis )
     {
+        if( m_state != eDominoStageState.eStateRunning )
+        {
+            return 0;
+        }
+
         // check if hit the endpoint 
         Vector2 epPos = new Vector2(m_endPoint.transform.localPosition.x, m_endPoint.transform.localPosition.y);
         if( ( epPos - spot ).magnitude < forceDis )
@@ -127,6 +159,11 @@ public class DominoStage : MonoBehaviour
     /// <returns></returns>
     public bool HitDominos( Vector2 pos, float range, Domino domino = null )
     {
+        if (m_state != eDominoStageState.eStateRunning)
+        {
+            return false;
+        }
+
         foreach (Domino d in m_dominos)
         {
             if ( d != domino && d.IsStand())

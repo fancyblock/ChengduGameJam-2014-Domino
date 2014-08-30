@@ -275,7 +275,7 @@ public class Domino : MonoBehaviour
             m_imgLay.SetActive(true);
 
             // fail ( Game Over ) 
-            //TODO 
+            m_stage.DominoPushFail();
         }
     }
 

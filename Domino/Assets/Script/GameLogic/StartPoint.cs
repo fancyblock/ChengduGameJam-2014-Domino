@@ -5,14 +5,9 @@ public class StartPoint : MonoBehaviour
 {
     public DominoStage m_dominoStage;
     public float m_forceRange;
-
-	// Use this for initialization
-	void Start () 
-    {	
-	}
 	
     /// <summary>
-    /// trigger the domino 
+    /// trigger the domino from a direction 
     /// </summary>
     [ContextMenu("Trigger")]
     public void Trigger()
@@ -27,6 +22,15 @@ public class StartPoint : MonoBehaviour
 
         m_dominoStage.ForceToSpot( new Vector2( transform.localPosition.x, transform.localPosition.y ),
            dir , m_forceRange );
+    }
+
+    /// <summary>
+    /// trigger a point range 
+    /// </summary>
+    public void TriggerPoint()
+    {
+        m_dominoStage.HitDominos(new Vector2(transform.localPosition.x, transform.localPosition.y),
+            m_forceRange);
     }
 
 }
