@@ -42,21 +42,21 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: f5262cdfc07f09a438f8be800d216099, type: 2}
   mSprites:
   - name: aniDomino01
-    x: 83
-    y: 10
-    width: 32
+    x: 0
+    y: 35
+    width: 21
     height: 60
     borderLeft: 0
     borderRight: 0
     borderTop: 0
     borderBottom: 0
-    paddingLeft: 0
+    paddingLeft: 11
     paddingRight: 50
     paddingTop: 0
     paddingBottom: 0
   - name: aniDomino02
-    x: 83
-    y: 71
+    x: 0
+    y: 96
     width: 67
     height: 57
     borderLeft: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
     paddingBottom: 1
   - name: aniDomino03
     x: 0
-    y: 26
+    y: 154
     width: 82
     height: 48
     borderLeft: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
     paddingBottom: 5
   - name: aniDomino04
     x: 0
-    y: 75
+    y: 203
     width: 82
     height: 53
     borderLeft: 0
@@ -94,8 +94,8 @@ MonoBehaviour:
     paddingTop: 4
     paddingBottom: 3
   - name: btnBlue
-    x: 151
-    y: 80
+    x: 83
+    y: 208
     width: 40
     height: 48
     borderLeft: 14
@@ -107,8 +107,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: domino
-    x: 116
-    y: 10
+    x: 22
+    y: 35
     width: 21
     height: 60
     borderLeft: 0

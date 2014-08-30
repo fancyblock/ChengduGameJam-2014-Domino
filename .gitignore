@@ -7,3 +7,7 @@ Domino/Temp
 *.userprefs
 *.DS_Store
 
+/Domino/Assets/NGUI/Examples/Scripts.meta
+/Domino/UnityVS.Domino.sln.DotSettings
+/Domino/UnityVS.Domino.v12.suo
+/Domino/obj/Debug
