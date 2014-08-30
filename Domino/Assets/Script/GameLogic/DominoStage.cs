@@ -38,10 +38,7 @@ public class DominoStage : MonoBehaviour
         //[TEMP]
         // calculate the mouse position and trigger
         Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(1.0f, 0.0f), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(-1.0f, 0.0f), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, 1.0f), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, -1.0f), 70);
+        HitDominos(new Vector2(pos.x, pos.y), 50.0f);
         //[TEMP]
     }
 
@@ -120,6 +117,28 @@ public class DominoStage : MonoBehaviour
         }
 
         return pushDownCount;
+    }
+
+    /// <summary>
+    /// hit dominos 
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="range"></param>
+    /// <returns></returns>
+    public bool HitDominos( Vector2 pos, float range, Domino domino = null )
+    {
+        foreach (Domino d in m_dominos)
+        {
+            if ( d != domino && d.IsStand())
+            {
+                if (d.Push( pos, range ))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

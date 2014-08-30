@@ -45,7 +45,11 @@ public class Domino : MonoBehaviour
 
                 // trigger ( in edit mode, you still can put down other dominos )
                 m_timer += Time.fixedDeltaTime;
-                //TODO 
+                if( m_timer > 0.3f )
+                {
+                    m_timer = 0.0f;
+                    m_stage.HitDominos(new Vector2(transform.localPosition.x, transform.localPosition.y), 20.0f, this);
+                }
             }
             else
             {
@@ -118,7 +122,7 @@ public class Domino : MonoBehaviour
     }
 
     /// <summary>
-    /// push the domino 
+    /// push the domino by a vector 
     /// </summary>
     /// <param name="spot"></param>
     /// <param name="forceDis"></param>
@@ -135,9 +139,54 @@ public class Domino : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// push by a point 
+    /// </summary>
+    /// <param name="spot"></param>
+    /// <param name="forceDis"></param>
+    /// <returns></returns>
+    public bool Push( Vector2 spot, float forceDis )
+    {
+        Vector2 selfPos = new Vector2(transform.localPosition.x, transform.localPosition.y);
+
+        if ((selfPos - spot).magnitude < forceDis)   // pretest 
+        {
+            // calculate if this domino can be push down or not 
+            pushDomino(spot, forceDis, selfPos);
+
+            return true;
+        }
+
+        return false;
+    }
+
 
     //---------------------- private functions ----------------------- 
     
+    /// <summary>
+    /// push domino 
+    /// </summary>
+    /// <param name="forcePoint"></param>
+    /// <param name="forceRange"></param>
+    /// <param name="selfPos"></param>
+    /// <returns></returns>
+    protected void pushDomino( Vector2 forcePoint, float forceRange, Vector2 selfPos )
+    {
+        Vector2 forceToDomino = selfPos - forcePoint;
+
+        forceToDomino.Normalize();
+
+        if (Vector2.Dot(forceToDomino, m_dir) > 0.0f)
+        {
+            // down forward 
+            downOver(true);
+        }
+        else
+        {
+            // down back 
+            downOver(false);
+        }
+    }
 
     /// <summary>
     /// push the domino 
