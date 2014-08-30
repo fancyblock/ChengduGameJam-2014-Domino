@@ -33,7 +33,7 @@ public class Domino : MonoBehaviour
     /// <returns></returns>
     public bool IsStand()
     {
-        return m_stage == STATE_STAND;
+        return m_state == STATE_STAND;
     }
 
     /// <summary>
@@ -73,9 +73,11 @@ public class Domino : MonoBehaviour
     /// </summary>
     /// <param name="spot"></param>
     /// <param name="forceDis"></param>
-    public void Push( Vector2 spot, float forceDis )
+    public bool Push( Vector2 spot, float forceDis )
     {
         //TODO 
+
+        return false;
     }
 
     /// <summary>
