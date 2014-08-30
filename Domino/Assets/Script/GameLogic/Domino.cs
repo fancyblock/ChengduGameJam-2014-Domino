@@ -23,6 +23,8 @@ public class Domino : MonoBehaviour
     protected Vector2 m_dir;
     protected bool m_isForward;
 
+    protected float m_timer;    // for trigger in edit mode 
+
 	// Use this for initialization
 	void Start () 
     {
@@ -202,10 +204,11 @@ public class Domino : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
 
-        m_imgStand.SetActive(false);
-
         // play laying animation 
         m_aniDowning.Play();
+
+        yield return new WaitForFixedUpdate();
+        m_imgStand.SetActive(false);
 
         yield return new WaitForSeconds(0.14f);
 
@@ -220,6 +223,9 @@ public class Domino : MonoBehaviour
         else
         {
             m_imgLay.SetActive(true);
+
+            // fail ( Game Over ) 
+            //TODO 
         }
     }
 

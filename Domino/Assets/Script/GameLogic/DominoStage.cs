@@ -33,6 +33,11 @@ public class DominoStage : MonoBehaviour
         //[TEMP] 
 	}
 
+    public void onDoubleClk()
+    {
+        //TODO 
+    }
+
     /// <summary>
     /// remove all the dominos and reset all values 
     /// </summary>
@@ -82,10 +87,16 @@ public class DominoStage : MonoBehaviour
         Vector2 epPos = new Vector2(m_endPoint.transform.localPosition.x, m_endPoint.transform.localPosition.y);
         if( ( epPos - spot ).magnitude < forceDis )
         {
+            bool isHitEndPoint = false;
+
             // More accurate calculations
             //TODO 
+            isHitEndPoint = true;       //[TEMP]
 
-            m_endPoint.HitEndPoint();
+            if( isHitEndPoint )
+            {
+                m_endPoint.HitEndPoint();
+            }
         }
 
         int pushDownCount = 0;

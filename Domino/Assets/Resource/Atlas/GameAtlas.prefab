@@ -42,8 +42,8 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: f5262cdfc07f09a438f8be800d216099, type: 2}
   mSprites:
   - name: aniDomino01
-    x: 83
-    y: 7
+    x: 2005
+    y: 1988
     width: 21
     height: 60
     borderLeft: 0
@@ -55,8 +55,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: aniDomino02
-    x: 129
-    y: 22
+    x: 1876
+    y: 1876
     width: 67
     height: 57
     borderLeft: 0
@@ -68,8 +68,8 @@ MonoBehaviour:
     paddingTop: 2
     paddingBottom: 1
   - name: aniDomino03
-    x: 129
-    y: 80
+    x: 1959
+    y: 1939
     width: 82
     height: 48
     borderLeft: 0
@@ -81,8 +81,8 @@ MonoBehaviour:
     paddingTop: 7
     paddingBottom: 5
   - name: aniDomino04
-    x: 0
-    y: 14
+    x: 1876
+    y: 1934
     width: 82
     height: 53
     borderLeft: 0
@@ -93,9 +93,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 4
     paddingBottom: 3
+  - name: bgLine
+    x: 500
+    y: 375
+    width: 2
+    height: 768
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: domino
-    x: 105
-    y: 7
+    x: 1944
+    y: 1873
     width: 21
     height: 60
     borderLeft: 0
@@ -106,9 +119,35 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: hintFrame
+  - name: flower1
     x: 0
-    y: 68
+    y: 674
+    width: 422
+    height: 232
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: flower2
+    x: 1565
+    y: 1310
+    width: 457
+    height: 242
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: hintFrame
+    x: 1876
+    y: 1988
     width: 128
     height: 60
     borderLeft: 0
@@ -119,11 +158,167 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: square_8
+  - name: rainbow01
+    x: 1795
+    y: 1625
+    width: 192
+    height: 175
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow02
     x: 0
-    y: 5
+    y: 454
+    width: 336
+    height: 219
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow03
+    x: 0
+    y: 234
+    width: 336
+    height: 219
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow04
+    x: 1025
+    y: 1308
+    width: 539
+    height: 244
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow05
+    x: 1025
+    y: 1553
+    width: 769
+    height: 247
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow07
+    x: 1025
+    y: 1801
+    width: 850
+    height: 247
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow08
+    x: 0
+    y: 1801
+    width: 1024
+    height: 247
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow09
+    x: 0
+    y: 1305
+    width: 1024
+    height: 247
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: rainbow10
+    x: 0
+    y: 1553
+    width: 1024
+    height: 247
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: square_8
+    x: 2027
+    y: 2040
     width: 8
     height: 8
+    borderLeft: 2
+    borderRight: 2
+    borderTop: 2
+    borderBottom: 2
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: star1
+    x: 1876
+    y: 1804
+    width: 49
+    height: 71
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: title
+    x: 0
+    y: 907
+    width: 499
+    height: 236
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: wall
+    x: 0
+    y: 1144
+    width: 1024
+    height: 160
     borderLeft: 0
     borderRight: 0
     borderTop: 0
