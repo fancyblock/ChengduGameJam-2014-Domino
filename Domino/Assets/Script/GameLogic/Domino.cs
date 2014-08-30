@@ -179,11 +179,11 @@ public class Domino : MonoBehaviour
         // set the display object to right direction 
         if( isForward )
         {
-            m_aniContainer.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
+            m_aniContainer.localRotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
         }
         else
         {
-            m_aniContainer.rotation = Quaternion.AngleAxis(180.0f, Vector3.forward);
+            m_aniContainer.localRotation = Quaternion.AngleAxis(180.0f, Vector3.forward);
         }
 
         StartCoroutine("onDowning");
@@ -225,6 +225,7 @@ public class Domino : MonoBehaviour
     protected void setDominoDepth( int depth )
     {
         m_imgOverlay.GetComponent<UISprite>().depth = depth;
+        m_imgLay.GetComponent<UISprite>().depth = depth;
         m_aniDowning.GetComponent<UISprite>().depth = depth;
     }
 

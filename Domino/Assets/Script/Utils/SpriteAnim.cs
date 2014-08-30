@@ -10,14 +10,13 @@ public class SpriteAnim : MonoBehaviour
     protected bool m_isPlaying = false;
     protected float m_timer = 0.0f;
 
-	
 	// Update is called once per frame
 	void Update () 
     {
         if( m_isPlaying )
         {
             int frameIndex = Mathf.FloorToInt(m_timer / m_interval);
-            Debug.Log("-- " + frameIndex + "    " + m_timer);
+
             if( frameIndex >= m_frames.Length )
             {
                 gameObject.SetActive(false);
@@ -26,7 +25,6 @@ public class SpriteAnim : MonoBehaviour
 
             if( m_sprite.spriteName != m_frames[frameIndex] )
             {
-                //Debug.Log("change sprite " + m_frames[frameIndex]);
                 m_sprite.spriteName = m_frames[frameIndex];
             }
 
