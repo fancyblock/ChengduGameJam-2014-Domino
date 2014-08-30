@@ -35,7 +35,14 @@ public class DominoStage : MonoBehaviour
 
     public void onDoubleClk()
     {
-        //TODO 
+        //[TEMP]
+        // calculate the mouse position and trigger
+        Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(1.0f, 0.0f), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(-1.0f, 0.0f), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, 1.0f), 70);
+        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, -1.0f), 70);
+        //[TEMP]
     }
 
     /// <summary>

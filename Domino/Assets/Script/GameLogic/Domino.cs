@@ -23,7 +23,7 @@ public class Domino : MonoBehaviour
     protected Vector2 m_dir;
     protected bool m_isForward;
 
-    protected float m_timer;    // for trigger in edit mode 
+    protected float m_timer = 0.0f;    // for trigger in edit mode 
 
 	// Use this for initialization
 	void Start () 
@@ -44,6 +44,7 @@ public class Domino : MonoBehaviour
                 m_hintFrame.SetActive(true);
 
                 // trigger ( in edit mode, you still can put down other dominos )
+                m_timer += Time.fixedDeltaTime;
                 //TODO 
             }
             else
