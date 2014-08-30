@@ -33,21 +33,6 @@ public class DominoStage : MonoBehaviour
 	}
 
     /// <summary>
-    /// mouse double click on stage for trigger a force 
-    /// </summary>
-    public void onMouseClick()
-    {
-        //[TEMP]
-        // calculate the mouse position and trigger
-        Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(1.0f, 0.0f), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(-1.0f, 0.0f), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, 1.0f), 70);
-        ForceToSpot(new Vector2(pos.x, pos.y), new Vector2(0.0f, -1.0f), 70);
-        //[TEMP]
-    }
-
-    /// <summary>
     /// remove all the dominos and reset all values 
     /// </summary>
     public void Reset()
