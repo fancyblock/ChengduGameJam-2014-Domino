@@ -17,6 +17,7 @@ public class Domino : MonoBehaviour
     protected int m_state;
     protected float m_angle;
     protected Vector2 m_dir;
+    protected bool m_isForward;
 
 	// Use this for initialization
 	void Start () 
@@ -127,7 +128,23 @@ public class Domino : MonoBehaviour
     /// <returns></returns>
     protected bool pushDomino( Vector2 forceSpot, Vector2 forceDir, float forceDis, Vector2 selfPos )
     {
-        //TODO 
+        Vector2 forceToDomino = selfPos - forceSpot;
+
+        if( Vector2.Dot(forceToDomino, forceDir) * forceDis >= forceToDomino.magnitude )
+        {
+            forceToDomino.Normalize();
+
+            if( Vector2.Dot( forceToDomino, m_dir ) > 0.0f )
+            {
+                downOver(true);
+            }
+            else
+            {
+                downOver(false);
+            }
+
+            return true;
+        }
 
         return false;
     }
@@ -139,37 +156,60 @@ public class Domino : MonoBehaviour
     protected void downOver( bool isForward )
     {
         m_state = STATE_LAYING;
+        m_isForward = isForward;
 
+        // set domino depth 
+        setDominoDepth(m_stage.GetNextAvailableDepth());
+
+        // set the display object to right direction 
         if( isForward )
         {
-            StartCoroutine("onDownForward");
+            //TODO 
         }
         else
         {
-            StartCoroutine("onDownBack");
+            //TODO 
         }
+
+        StartCoroutine("onDowning");
     }
 
     /// <summary>
     /// downing forward 
     /// </summary>
     /// <returns></returns>
-    protected IEnumerator onDownForward()
+    protected IEnumerator onDowning()
     {
         yield return new WaitForFixedUpdate();
 
+        m_imgStand.SetActive(false);
+
+        // play laying animation 
         //TODO 
+
+        yield return new WaitForSeconds(0.2f);
+
+        // try to push next 
+        int pushedCount = m_stage.ForceToSpot(new Vector2(transform.localPosition.x, transform.localPosition.y),
+            m_isForward ? m_dir : m_dir * -1, m_blockLength);
+
+        if( pushedCount > 0 )
+        {
+            m_imgOverlay.SetActive(true);
+        }
+        else
+        {
+            m_imgLay.SetActive(true);
+        }
     }
 
     /// <summary>
-    /// downing back
+    /// set domino depth 
     /// </summary>
-    /// <returns></returns>
-    protected IEnumerator onDownBack()
+    /// <param name="depth"></param>
+    protected void setDominoDepth( int depth )
     {
-        yield return new WaitForFixedUpdate();
-
-        //TODO 
+        m_imgOverlay.GetComponent<UISprite>().depth = depth;
     }
 
 }
