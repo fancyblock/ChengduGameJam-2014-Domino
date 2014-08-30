@@ -10,6 +10,7 @@ public class DominoStage : MonoBehaviour
     public GameObject m_dominoTemplete;
     public Transform m_stage;
     public Camera m_camera;
+    public EndPoint m_endPoint;
 
     protected List<Domino> m_dominos = new List<Domino>();
     protected int m_curAvailableDepth = INIT_DEPTH;
@@ -77,6 +78,16 @@ public class DominoStage : MonoBehaviour
     /// <param name="forceDis"></param>
     public int ForceToSpot( Vector2 spot, Vector2 dir, float forceDis )
     {
+        // check if hit the endpoint 
+        Vector2 epPos = new Vector2(m_endPoint.transform.localPosition.x, m_endPoint.transform.localPosition.y);
+        if( ( epPos - spot ).magnitude < forceDis )
+        {
+            // More accurate calculations
+            //TODO 
+
+            m_endPoint.HitEndPoint();
+        }
+
         int pushDownCount = 0;
 
         foreach( Domino d in m_dominos )

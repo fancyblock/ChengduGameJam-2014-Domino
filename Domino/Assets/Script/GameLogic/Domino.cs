@@ -40,6 +40,9 @@ public class Domino : MonoBehaviour
             if (m_dragObject.IN_DRAGGING)
             {
                 m_hintFrame.SetActive(true);
+
+                // trigger ( in edit mode, you still can put down other dominos )
+                //TODO 
             }
             else
             {
@@ -151,10 +154,12 @@ public class Domino : MonoBehaviour
 
             if( Vector2.Dot( forceToDomino, m_dir ) > 0.0f )
             {
+                // down forward 
                 downOver(true);
             }
             else
             {
+                // down back 
                 downOver(false);
             }
 
