@@ -7,6 +7,7 @@ public class Domino : MonoBehaviour
     public const int STATE_LAY = 1;
     public const int STATE_OVERLAY = 2;
     public const int STATE_LAYING = 3;
+    public const int STATE_ROTATION = 4;
 
     public GameObject m_imgStand;
     public GameObject m_imgOverlay;
@@ -14,6 +15,7 @@ public class Domino : MonoBehaviour
     public GameObject m_hintFrame;
     public SpriteAnim m_aniDowning;
     public Transform m_aniContainer;
+    public Transform m_flagRotate;
     public UIDragObject m_dragObject;
     public float m_blockLength;
 
@@ -32,6 +34,7 @@ public class Domino : MonoBehaviour
         SetAngle(0.0f);
         m_hintFrame.SetActive(false);
         m_aniDowning.gameObject.SetActive(false);
+        m_flagRotate.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -54,6 +57,19 @@ public class Domino : MonoBehaviour
             else
             {
                 m_hintFrame.SetActive(false);
+            }
+        }
+        else if( m_state == STATE_ROTATION )
+        {
+            if( Input.GetKey( KeyCode.LeftArrow ) || Input.GetKey( KeyCode.A ) )
+            {
+                SetAngle(m_angle + 1.5f);
+                m_flagRotate.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+            }
+            else if( Input.GetKey( KeyCode.RightArrow ) || Input.GetKey( KeyCode.D ) )
+            {
+                SetAngle(m_angle - 1.5f);
+                m_flagRotate.localScale = Vector3.one;
             }
         }
 	}
@@ -114,11 +130,26 @@ public class Domino : MonoBehaviour
     }
 
     /// <summary>
-    /// rotation the domino 
+    /// rotate the domino by double click 
     /// </summary>
     public void onEditRotation()
     {
-        SetAngle(m_angle + 30.0f);
+        if( m_state == STATE_STAND )
+        {
+            // enter rotation mode 
+            m_flagRotate.gameObject.SetActive(true);
+
+            m_state = STATE_ROTATION;
+            m_dragObject.enabled = false;
+        }
+        else if( m_state == STATE_ROTATION )
+        {
+            // leave rotation mode 
+            m_flagRotate.gameObject.SetActive(false);
+
+            m_state = STATE_STAND;
+            m_dragObject.enabled = true;
+        }
     }
 
     /// <summary>
