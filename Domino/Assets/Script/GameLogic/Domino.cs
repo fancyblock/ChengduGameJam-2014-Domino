@@ -11,6 +11,10 @@ public class Domino : MonoBehaviour
     public GameObject m_imgStand;
     public GameObject m_imgOverlay;
     public GameObject m_imgLay;
+    public GameObject m_hintFrame;
+    public SpriteAnim m_aniDowning;
+    public Transform m_aniContainer;
+    public UIDragObject m_dragObject;
     public float m_blockLength;
 
     protected DominoStage m_stage;
@@ -24,11 +28,24 @@ public class Domino : MonoBehaviour
     {
         SetStandState();
         SetAngle(0.0f);
+        m_hintFrame.SetActive(false);
+        m_aniDowning.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
+        if( m_state == STATE_STAND )
+        {
+            if (m_dragObject.IN_DRAGGING)
+            {
+                m_hintFrame.SetActive(true);
+            }
+            else
+            {
+                m_hintFrame.SetActive(false);
+            }
+        }
 	}
 
     /// <summary>
@@ -91,9 +108,7 @@ public class Domino : MonoBehaviour
     /// </summary>
     public void onEditRotation()
     {
-        //[TEMP]
         SetAngle(m_angle + 30.0f);
-        //[TEMP]
     }
 
     /// <summary>
@@ -164,11 +179,11 @@ public class Domino : MonoBehaviour
         // set the display object to right direction 
         if( isForward )
         {
-            //TODO 
+            m_aniContainer.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
         }
         else
         {
-            //TODO 
+            m_aniContainer.rotation = Quaternion.AngleAxis(180.0f, Vector3.forward);
         }
 
         StartCoroutine("onDowning");
@@ -185,9 +200,9 @@ public class Domino : MonoBehaviour
         m_imgStand.SetActive(false);
 
         // play laying animation 
-        //TODO 
+        m_aniDowning.Play();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.14f);
 
         // try to push next 
         int pushedCount = m_stage.ForceToSpot(new Vector2(transform.localPosition.x, transform.localPosition.y),
@@ -210,6 +225,7 @@ public class Domino : MonoBehaviour
     protected void setDominoDepth( int depth )
     {
         m_imgOverlay.GetComponent<UISprite>().depth = depth;
+        m_aniDowning.GetComponent<UISprite>().depth = depth;
     }
 
 }

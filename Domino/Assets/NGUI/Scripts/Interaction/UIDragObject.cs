@@ -79,6 +79,7 @@ public class UIDragObject : MonoBehaviour
 	int mTouchID = 0;
 	bool mStarted = false;
 	bool mPressed = false;
+    bool mInDragging = false;
 
 	/// <summary>
 	/// Auto-upgrade the legacy data.
@@ -98,6 +99,17 @@ public class UIDragObject : MonoBehaviour
 			if (w != null) contentRect = w;
 		}
 	}
+
+    /// <summary>
+    /// is in dragging or not 
+    /// </summary>
+    public bool IN_DRAGGING
+    {
+        get
+        {
+            return mInDragging;
+        }
+    }
 
 	void OnDisable () { mStarted = false; }
 
@@ -159,11 +171,14 @@ public class UIDragObject : MonoBehaviour
 					// Create the plane to drag along
 					Transform trans = UICamera.currentCamera.transform;
 					mPlane = new Plane((mPanel != null ? mPanel.cachedTransform.rotation : trans.rotation) * Vector3.back, UICamera.lastHit.point);
-				}
+
+                    mInDragging = true;
+                }
 			}
 			else if (mPressed && mTouchID == UICamera.currentTouchID)
 			{
 				mPressed = false;
+                mInDragging = false;
 				
 				if (restrictWithinPanel && dragEffect == DragEffect.MomentumAndSpring)
 				{
@@ -284,6 +299,8 @@ public class UIDragObject : MonoBehaviour
 				}
 				else CancelSpring();
 			}
+
+            mInDragging = false;
 		}
 		else mTargetPos = (target != null) ? target.position : Vector3.zero;
 
@@ -300,6 +317,8 @@ public class UIDragObject : MonoBehaviour
 		mTargetPos = (target != null) ? target.position : Vector3.zero;
 		mMomentum = Vector3.zero;
 		mScroll = Vector3.zero;
+
+        mInDragging = false;
 	}
 
 	/// <summary>
