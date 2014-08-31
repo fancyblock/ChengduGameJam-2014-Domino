@@ -92,11 +92,6 @@ public class DominoStage : MonoBehaviour
     /// <param name="forceDis"></param>
     public int ForceToSpot( Vector2 spot, Vector2 dir, float forceDis )
     {
-        if( m_state != eDominoStageState.eStateRunning )
-        {
-            return 0;
-        }
-
         // check if hit the endpoint 
         Vector2 epPos = new Vector2(m_endPoint.transform.localPosition.x, m_endPoint.transform.localPosition.y);
         if( ( epPos - spot ).magnitude < forceDis )

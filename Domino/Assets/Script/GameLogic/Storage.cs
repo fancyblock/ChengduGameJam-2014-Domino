@@ -12,6 +12,16 @@ public class Storage : MonoBehaviour
     {
         m_txtRestCount.text = "Rest count: " + m_count;
 	}
+
+    /// <summary>
+    /// reset the storage 
+    /// </summary>
+    /// <param name="count"></param>
+    public void Reset( int count )
+    {
+        m_count = count;
+        m_txtRestCount.text = "Rest count: " + m_count;
+    }
 	
     /// <summary>
     /// create a domino 
