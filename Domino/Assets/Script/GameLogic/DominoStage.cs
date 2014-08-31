@@ -22,28 +22,6 @@ public class DominoStage : MonoBehaviour
     protected eDominoStageState m_state;
     protected List<Domino> m_dominos = new List<Domino>();
     protected int m_curAvailableDepth = INIT_DEPTH;
-	
-    //------------------------ TEMP ------------------------
-    
-	// Update is called once per frame
-	void Update () 
-    {
-        // calculate the mouse position and create a domino 
-        if( Input.GetKeyUp( KeyCode.Alpha1 ))
-        {
-            Domino d = CreateDomino();
-            d.transform.localPosition = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
-        }
-	}
-
-    public void onDoubleClk()
-    {
-        // calculate the mouse position and trigger
-        Vector3 pos = m_camera.ScreenToWorldPoint(Input.mousePosition) * 384;
-        HitDominos(new Vector2(pos.x, pos.y), 50.0f);
-    }
-
-    //------------------------ TEMP ------------------------
 
     /// <summary>
     /// getter && setter of the domino stage state 

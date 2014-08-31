@@ -61,15 +61,23 @@ public class Domino : MonoBehaviour
         }
         else if( m_state == STATE_ROTATION )
         {
-            if( Input.GetKey( KeyCode.LeftArrow ) || Input.GetKey( KeyCode.A ) )
+            if (m_dragObject.IN_DRAGGING)
             {
-                SetAngle(m_angle + 1.5f);
-                m_flagRotate.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                m_flagRotate.gameObject.SetActive(false);
+                m_state = STATE_STAND;
             }
-            else if( Input.GetKey( KeyCode.RightArrow ) || Input.GetKey( KeyCode.D ) )
+            else
             {
-                SetAngle(m_angle - 1.5f);
-                m_flagRotate.localScale = Vector3.one;
+                if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+                {
+                    SetAngle(m_angle + 1.5f);
+                    m_flagRotate.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                }
+                else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+                {
+                    SetAngle(m_angle - 1.5f);
+                    m_flagRotate.localScale = Vector3.one;
+                }
             }
         }
 	}
@@ -138,17 +146,13 @@ public class Domino : MonoBehaviour
         {
             // enter rotation mode 
             m_flagRotate.gameObject.SetActive(true);
-
             m_state = STATE_ROTATION;
-            m_dragObject.enabled = false;
         }
         else if( m_state == STATE_ROTATION )
         {
             // leave rotation mode 
             m_flagRotate.gameObject.SetActive(false);
-
             m_state = STATE_STAND;
-            m_dragObject.enabled = true;
         }
     }
 
