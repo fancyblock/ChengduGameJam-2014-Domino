@@ -144,6 +144,12 @@ public class Domino : MonoBehaviour
     {
         if( m_state == STATE_STAND )
         {
+            SetAngle(m_angle + 30.0f);
+        }
+
+        /*
+        if( m_state == STATE_STAND )
+        {
             // enter rotation mode 
             m_flagRotate.gameObject.SetActive(true);
             m_state = STATE_ROTATION;
@@ -154,6 +160,7 @@ public class Domino : MonoBehaviour
             m_flagRotate.gameObject.SetActive(false);
             m_state = STATE_STAND;
         }
+         */
     }
 
     /// <summary>
